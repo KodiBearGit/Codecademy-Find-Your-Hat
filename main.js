@@ -10,37 +10,35 @@ class Field {
     this.field = field;
   }
   print() {
-    console.log(this.field.toString());
+    for (let i = 0; i < this.field.length; i++){
+    console.log(this.field[i].join(''));
+    }
   }
 }
 let top = 0;
 let left = 0; 
 
-function checkInvalidMove(top, left) {
-  if (myField.field[top][left] === '*') {
-    return true;
-  }
-  return false;
-}
-
 function checkMoveResult(top, left) {
   if (myField.field[top][left] === '^') {
-    console.log("you found your hat");
+    console.log(myField.field[top][left]);
+    console.log("you found your hat!");
     return gameOver = true;
   } 
   else if (myField.field[top][left] === 'O') {
+    console.log(myField.field[top][left]);
     console.log("you fell down the hole");
     return gameOver = true;
   }
-  else {
+  else if (myField.field[top][left] === '░' || myField.field[top][left] === '*') {
     myField.field[top][left] = '*';
+    console.log(myField.field[top][left]);
     return gameOver = false;
   }
 }
 
 //example of new Field class call.  
 const myField = new Field([
-  ['*', '^', 'O'],
+  ['*', '░', 'O'],
   ['░', 'O', '░'],
   ['░', '^', '░'],
   ['░', '░', '░'],
@@ -51,6 +49,7 @@ const myField = new Field([
 let gameOver = false;
 
 do {
+  myField.print();
   let move =  prompt('Which Way? u, d, l, or r? ');
 
   if (move === 'u') {
@@ -59,10 +58,8 @@ do {
       gameOver = true;
     }
     else {
-      if (!checkInvalidMove(top-1, left)) {
         top -= 1;
         checkMoveResult(top, left);
-      };
     }
   }
   else if (move === 'd') {
@@ -71,10 +68,8 @@ do {
       gameOver = true;
     }
     else {
-      if (!checkInvalidMove(top + 1, left)) {
         top += 1;
         checkMoveResult(top, left);
-      };
     }
   } 
   else if (move === 'l') {
@@ -83,10 +78,8 @@ do {
       gameOver = true;
     }
     else {
-      if (!checkInvalidMove(top, left - 1)) {
         left -= 1;
         checkMoveResult(top, left);
-      }
     }
   }
   else if (move === 'r') {
@@ -95,10 +88,8 @@ do {
       gameOver = true;
     }
     else {
-      if (!checkInvalidMove(top, left + 1)) {
         left += 1;
         checkMoveResult(top, left);
-      }
     }
   }
   else {

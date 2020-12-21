@@ -50,9 +50,10 @@ function generateGameField(height, width) {
   const myField = new Field([]);
   //just populate the whole thing then change for exceptions
   //20% chance of a hole
+  console.log(myField.field);
   let holeChance = 20
   for (let i = 0; i < height; i++) {
-    myField.field[i] = fieldCharacter;
+    myField.field[i] = [];
     for (let j = 0; j < width; j++) {
       if (Math.floor(Math.random()* 100 + 1) <= holeChance) {
         myField.field[i][j] = hole;
@@ -60,20 +61,19 @@ function generateGameField(height, width) {
       else {
         myField.field[i][j] = fieldCharacter;
       }
+      console.log(myField.field[i][j]);
     }
   }
-  //start position top left
-  myField.field[top][left] = currentCharacter;
   //Pick a winnerSpot
+  let randomColumn;
+  let randomRow;
+
   do {
-    let randomColumn = Math.floor(Math.random() * height);
-    let randomRow = Math.floor(Math.random() * width);
+    randomColumn = Math.floor(Math.random() * height);
+    randomRow = Math.floor(Math.random() * width);
     myField.field[randomColumn][randomRow] = hat;
   } while (randomColumn !== left && randomRow !== top);
-
-  //start position top left even overwrites hat placement at top,left
-  myField.field[top][left] = currentCharacter;
-
+}
 //example of new Field class call.  
 /* const myField = new Field([
   ['*', '░', 'O'],
@@ -148,4 +148,3 @@ do {
     gameOver === false
   }
 }  while (gameOver === false);
-

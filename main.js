@@ -4,6 +4,7 @@ const hat = '^';
 const hole = 'O';
 const fieldCharacter = '░';
 const pathCharacter = '*';
+const currentCharacter = '+';
 
 class Field {
   constructor(field) {
@@ -19,26 +20,33 @@ class Field {
 //function repsonds to a non-out of bounds move
 function checkMoveResult(top, left) {
   //evaluates a move to hat "^" position
-  if (myField.field[top][left] === '^') {
+  if (myField.field[top][left] === hat) {
     console.log("you found your hat!");
     return gameOver = true;
   } 
   //evaluates a move to hole "O" position
-  else if (myField.field[top][left] === 'O') {
+  else if (myField.field[top][left] === hole) {
     console.log("you fell down the hole");
     return gameOver = true;
   }
   //changes curent position to '+'
-  else if (myField.field[top][left] === '░' || myField.field[top][left] === '*') {
-    myField.field[top][left] = '+';
+  else if (myField.field[top][left] === fieldCharacter || myField.field[top][left] === pathCharacter) {
+    myField.field[top][left] = currentCharacter;
     return gameOver = false;
   }
 }
 
 //function changes previous position to '*'
 function moveASpace(top, left) {
-  myField.field[top][left] = '*';
+  myField.field[top][left] = pathCharacter;
 }
+
+//auto-generate a field based on height and width requested for the game..I made it somewhat random to have a hole appear. 
+function generateGameField(height, width) {
+  let winnerSpaceTaken = false;
+}
+
+
 //example of new Field class call.  
 const myField = new Field([
   ['*', '░', 'O'],
@@ -52,7 +60,7 @@ let top = 0;
 let left = 0; 
 
 //set initial position to  '+'
-myField.field[top][left] = '+';
+myField.field[top][left] = currentCharacter;
 let gameOver = false;
 
 //loop  unknown number of iterations keeps running until gameOver = True.

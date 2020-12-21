@@ -19,19 +19,36 @@ let left = 0;
 let move =  prompt('Which Way? u, d, l, or r');
 
 if (move === 'u') {
-  console.log('u');
   if (top === 0) {
     console.log("Out of Bounds");
   }
+  else {
+    top -= 1;
+  }
 }
 else if (move === 'd') {
-
+  if (top + 1 > myField.length) {
+    console.log("Out of Bounds");
+  }
+  else {
+    top += 1;
+  }
 } 
 else if (move === 'l') {
-
+  if (left === 0) {
+    console.log("Out of Bounds");
+  }
+  else {
+    left -= 1;
+  }
 }
 else if (move === 'r') {
-
+  if (left = myField[top].length) {
+    console.log("Out of Bounds");
+  }
+  else {
+    left += 1;
+  }
 }
 else {
   console.log("not a valid key");

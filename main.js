@@ -41,23 +41,50 @@ function moveASpace(top, left) {
   myField.field[top][left] = pathCharacter;
 }
 
+//sets starting postion of the game
+let top = 0;
+let left = 0; 
+
 //auto-generate a field based on height and width requested for the game..I made it somewhat random to have a hole appear. 
 function generateGameField(height, width) {
-  let winnerSpaceTaken = false;
-}
+  const myField = new Field([]);
+  //just populate the whole thing then change for exceptions
+  //20% chance of a hole
+  let holeChance = 20
+  for (let i = 0; i < height; i++) {
+    myField.field[i] = fieldCharacter;
+    for (let j = 0; j < width; j++) {
+      if (Math.floor(Math.random()* 100 + 1) <= holeChance) {
+        myField.field[i][j] = hole;
+      }
+      else {
+        myField.field[i][j] = fieldCharacter;
+      }
+    }
+  }
+  //start position top left
+  myField.field[top][left] = currentCharacter;
+  //Pick a winnerSpot
+  do {
+    let randomColumn = Math.floor(Math.random() * height);
+    let randomRow = Math.floor(Math.random() * width);
+    myField.field[randomColumn][randomRow] = hat;
+  } while (randomColumn !== left && randomRow !== top);
 
+  //start position top left even overwrites hat placement at top,left
+  myField.field[top][left] = currentCharacter;
 
 //example of new Field class call.  
-const myField = new Field([
+/* const myField = new Field([
   ['*', '░', 'O'],
   ['░', 'O', '░'],
   ['░', '^', '░'],
   ['░', '░', '░'],
 ]);
+*/
 
-//sets starting postion of the game
-let top = 0;
-let left = 0; 
+//call generateGameField which creates a new Field Instances and set game dimensions.
+generateGameField(10,10);
 
 //set initial position to  '+'
 myField.field[top][left] = currentCharacter;

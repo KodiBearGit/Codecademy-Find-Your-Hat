@@ -16,9 +16,31 @@ class Field {
 let top = 0;
 let left = 0; 
 
+function checkInvalidMove(top, left) {
+  if (myField.field[top][left] === '*') {
+    return true;
+  }
+  return false;
+}
+
+function checkMoveResult(top, left) {
+  if (myField.field[top][left] === '^') {
+    console.log("you found your hat");
+    return gameOver = true;
+  } 
+  else if (myField.field[top][left] === 'O') {
+    console.log("you fell down the hole");
+    return gameOver = true;
+  }
+  else {
+    myField.field[top][left] = '*';
+    return gameOver = false;
+  }
+}
+
 //example of new Field class call.  
 const myField = new Field([
-  ['*', '░', 'O'],
+  ['*', '^', 'O'],
   ['░', 'O', '░'],
   ['░', '^', '░'],
   ['░', '░', '░'],
@@ -37,7 +59,10 @@ do {
       gameOver = true;
     }
     else {
-      top -= 1;
+      if (!checkInvalidMove(top-1, left)) {
+        top -= 1;
+        checkMoveResult(top, left);
+      };
     }
   }
   else if (move === 'd') {
@@ -46,7 +71,10 @@ do {
       gameOver = true;
     }
     else {
-      top += 1;
+      if (!checkInvalidMove(top + 1, left)) {
+        top += 1;
+        checkMoveResult(top, left);
+      };
     }
   } 
   else if (move === 'l') {
@@ -55,18 +83,22 @@ do {
       gameOver = true;
     }
     else {
-      left -= 1;
+      if (!checkInvalidMove(top, left - 1)) {
+        left -= 1;
+        checkMoveResult(top, left);
+      }
     }
   }
   else if (move === 'r') {
-    console.log(myField.field[0].length);
     if (left === myField.field[0].length) {
       console.log("Out of Bounds, you lose");
       gameOver = true;
     }
     else {
-      left += 1;
-      console.log(left);
+      if (!checkInvalidMove(top, left + 1)) {
+        left += 1;
+        checkMoveResult(top, left);
+      }
     }
   }
   else {

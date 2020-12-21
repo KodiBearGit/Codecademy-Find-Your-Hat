@@ -46,22 +46,20 @@ let top = 0;
 let left = 0; 
 
 //auto-generate a field based on height and width requested for the game..I made it somewhat random to have a hole appear. 
-function generateGameField(height, width) {
-  const myField = new Field([]);
+function generateGameField(myClass, height, width) {
   //just populate the whole thing then change for exceptions
   //20% chance of a hole
-  console.log(myField.field);
   let holeChance = 20
   for (let i = 0; i < height; i++) {
-    myField.field[i] = [];
+    myClass.field[i] = [];
     for (let j = 0; j < width; j++) {
       if (Math.floor(Math.random()* 100 + 1) <= holeChance) {
-        myField.field[i][j] = hole;
+        myClass.field[i][j] = hole;
       }
       else {
-        myField.field[i][j] = fieldCharacter;
+        myClass.field[i][j] = fieldCharacter;
       }
-      console.log(myField.field[i][j]);
+      //console.log(myClass.field[i][j]);
     }
   }
   //Pick a winnerSpot
@@ -71,9 +69,11 @@ function generateGameField(height, width) {
   do {
     randomColumn = Math.floor(Math.random() * height);
     randomRow = Math.floor(Math.random() * width);
-    myField.field[randomColumn][randomRow] = hat;
-  } while (randomColumn !== left && randomRow !== top);
+    myField.field[randomRow][randomColumn] = hat;
+    //console.log(`row: ${randomRow} column: ${randomColumn}`);
+  } while (randomColumn === left && randomRow === top);
 }
+
 //example of new Field class call.  
 /* const myField = new Field([
   ['*', '░', 'O'],
@@ -84,8 +84,10 @@ function generateGameField(height, width) {
 */
 
 //call generateGameField which creates a new Field Instances and set game dimensions.
-generateGameField(10,10);
+const myField = new Field([]);
+generateGameField(myField, 10, 10);
 
+//onsole.log(myField.field[randomRow][randomColumn]);
 //set initial position to  '+'
 myField.field[top][left] = currentCharacter;
 let gameOver = false;

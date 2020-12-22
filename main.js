@@ -5,6 +5,7 @@ const hole = 'O';
 const fieldCharacter = '░';
 const pathCharacter = '*';
 const currentCharacter = '+';
+let gameOver = false;
 
 class Field {
   constructor(field) {
@@ -15,67 +16,73 @@ class Field {
     console.log(this.field[i].join(''));
     }
   }
-  //auto-generate a field based on height and width requested for the game..I made it somewhat random to have a hole appear. 
-  static generateGameField(height, width) {
+  //auto-generate a field based on height and width requested for the game..I made it somewhat random to have a hole appear for now 20%. Start Position is Unknown and not assgined here.  Instead I'm assigning under play game with a strategy to move the hat if it is at the same position as the start point.
+  static generateGameField(height, width, holeChance) {
     //just populate the whole thing then change for exceptions
     //20% chance of a hole
-    let holeChance = 20
+    let gameArray = [];
     for (let i = 0; i < height; i++) {
-      this.field[i] = [];
+      gameArray[i] = [];
       for (let j = 0; j < width; j++) {
         if (Math.floor(Math.random()* 100 + 1) <= holeChance) {
-          this.field[i][j] = hole;
+          gameArray[i][j] = hole;
         }
         else {
-          this.field[i][j] = fieldCharacter;
+          gameArray[i][j] = fieldCharacter;
         }
-        //console.log(this.field[i][j]);
+        //console.log(gameArray[i][j]);
       }
     }
-    //Pick a winnerSpot
-    let randomColumn;
-    let randomRow;
-  
-    do {
-      randomColumn = Math.floor(Math.random() * height);
-      randomRow = Math.floor(Math.random() * width);
-      this.field[randomRow][randomColumn] = hat;
-      //console.log(`row: ${randomRow} column: ${randomColumn}`);
-    } while (randomColumn === left && randomRow === top);
+    return gameArray;
   }
+
   //function repsonds to a non-out of bounds move
   checkMoveResult(top, left) {
     //evaluates a move to hat "^" position
-    if (myField.field[top][left] === hat) {
+    if (this.field[top][left] === hat) {
       console.log("you found your hat!");
-      return gameOver = true;
+      gameOver = true;
     } 
     //evaluates a move to hole "O" position
-    else if (myField.field[top][left] === hole) {
+    else if (this.field[top][left] === hole) {
       console.log("you fell down the hole");
-      return gameOver = true;
+      gameOver = true;
     }
     //changes curent position to '+'
-    else if (myField.field[top][left] === fieldCharacter || myField.field[top][left] === pathCharacter) {
-      myField.field[top][left] = currentCharacter;
-      return gameOver = false;
+    else if (this.field[top][left] === fieldCharacter || this.field[top][left] === pathCharacter) {
+      this.field[top][left] = currentCharacter;
+      gameOver = false;
     }
   }
   //function changes previous position to '*'
   moveASpace(top, left) {
-    myField.field[top][left] = pathCharacter;
+    this.field[top][left] = pathCharacter;
   }
 
-  playAGame(startTop, startleft) {
-    let gameOver = false;
+  pickAWinner(top, left) {
+    //Pick a winnerSpot MOVE THIS
+    let randomColumn;
+    let randomRow;
+    do {
+    let randomColumn = Math.floor(Math.random() * this.field[0].length);
+    let randomRow = Math.floor(Math.random() * this.field.length);
+    this.field[randomRow][randomColumn] = hat;
+    } while (randomColumn === left && randomRow === top);
+  }
+
+  playAGame(top, left) {
+    //sets winning point;
+    this.pickAWinner(top, left);
+    //sets start point
+    this.field[top][left] = currentCharacter;
     //loop  unknown number of iterations keeps running until gameOver = True.
     do {
-      myField.print();
+      this.print();
       let move =  prompt('Which Way? u, d, l, or r? ');
       //user moves up "u"
       if (move === 'u') {
         if (top === 0) {
-          console.log("Out of Bounds");
+          console.log("Out of Bounds, YOU LOSE!");
           gameOver = true;
         }
         else {
@@ -86,20 +93,22 @@ class Field {
       }
       //user moves down "d"
       else if (move === 'd') {
-        if (top + 1 > myField.field.length) {
-          console.log("Out of Bounds");
+        console.log(this.field.length); 
+        if (top + 1 >= this.field.length) {
+          console.log("Out of Bounds, YOU LOSE!");
           gameOver = true;
         }
         else {
           this.moveASpace(top, left)
           top += 1;
+          console.log(top);
           this.checkMoveResult(top, left);
         }
       } 
       //user moves left "l"
       else if (move === 'l') {
         if (left === 0) {
-          console.log("Out of Bounds");
+          console.log("Out of Bounds, YOU LOSE!");
           gameOver = true;
         }
         else {
@@ -110,8 +119,8 @@ class Field {
       }
       //user moves right "r"
       else if (move === 'r') {
-        if (left === myField.field[0].length) {
-          console.log("Out of Bounds, you lose");
+        if (left === this.field[0].length - 1) {
+          console.log("Out of Bounds, YOU LOSE!");
           gameOver = true;
         }
         else {
@@ -123,7 +132,7 @@ class Field {
       //user presses invalid key
       else {
         console.log("not a valid key");
-        gameOver === false
+        gameOver = false
       }
     }  while (gameOver === false);
   }
@@ -139,8 +148,9 @@ class Field {
 */
 
 //call generateGameField which creates a new Field Instances and set game dimensions.
-const myField = new Field([]);
-myField.generateGameField(10, 10);
+const myField = new Field(Field.generateGameField(10, 10, 10));
+//Field.generateGameField(10, 10);
+myField.playAGame(0,0);
 
 
 

@@ -40,12 +40,12 @@ class Field {
   checkMoveResult(top, left) {
     //evaluates a move to hat "^" position
     if (this.field[top][left] === hat) {
-      console.log("you found your hat!");
+      console.log("you found your hat! YOU WIN!");
       gameOver = true;
     } 
     //evaluates a move to hole "O" position
     else if (this.field[top][left] === hole) {
-      console.log("you fell down the hole");
+      console.log("you fell down the hole. YOU LOST!");
       gameOver = true;
     }
     //changes curent position to '+'
@@ -71,6 +71,16 @@ class Field {
   }
 
   playAGame(top, left) {
+    //is the start position of top, left even valid?
+    if (top >= this.field.length) {
+      return console.log(`You have entered a value that exceed the current game table height of: ${this.field.length}`);
+    } 
+    else if (left >this.field[0].length) {
+      return console.log(`You have entered values that exceed the current game table width of: ${this.field[0].length}`);
+    } 
+    else if (top < 0 || left < 0) {
+      return console.log("the lowest starting position for column or row is zero (0)");
+    }
     //sets winning point;
     this.pickAWinner(top, left);
     //sets start point
@@ -149,8 +159,9 @@ class Field {
 
 //call generateGameField which creates a new Field Instances and set game dimensions.
 const myField = new Field(Field.generateGameField(10, 10, 10));
-//Field.generateGameField(10, 10);
-myField.playAGame(0,0);
+
+//works with fields that are in scope of the current game table could add code to check if these values are within [] ranges.  
+myField.playAGame(1,4);
 
 
 
